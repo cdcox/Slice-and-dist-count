@@ -44,8 +44,10 @@ while(cap.isOpened()):
     if i%25==0:
         img= np.mean(frame,2)
         median_im.append(gaussian(img,sigma=3))
+    
     if i ==1500:
         break
+
 median_im = np.array(median_im)
 median_im = np.median(median_im,0)
 cap = cv2.VideoCapture(r'C:\Users\Conor\Documents\GitHub\Slice-and-dist-count\Video 2006.wmv')
@@ -65,11 +67,14 @@ i=0
 output = []
 while(cap.isOpened()):
     ret,frame = cap.read()
+
     if ret == False:
         break
     i+=1
     if i%100 ==0:
-        print(i/15) 
+        print(i/15)
+    if i%2==0:
+        continue
     img = np.mean(frame,2)
     img = gaussian(img,sigma=3)
     img = np.abs(img-median_im)
