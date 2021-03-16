@@ -22,7 +22,7 @@ directory = r'C:\Users\coxbox\Documents\GitHub\Slice-and-dist-count\work_dir'
 file_list = os.listdir(directory)
 target_points_all = []
 for v_file in file_list:
-    if not('.wmv' in v_file):
+    if not('.wmv' in v_file[-5:]):
         continue
     cap = cv2.VideoCapture(os.path.join(directory,v_file))
     #directory = r'C:\Users\Conor\Desktop\TRNDeepnetWorkingdir\AL_trn files'
@@ -60,10 +60,11 @@ for v_file in file_list:
             break
     median_im = np.array(median_im)
     median_im = np.median(median_im,0)
-    imsave(os.path.join(directory,v_file,'.png'),median_im)
-    
-    
-    
-    
-    
+    median_im = median_im.astype(np.uint8)
+    target_points_all.append(target_points[0])
+    target_points_all.append(target_points[1])
+    imsave(os.path.join(directory,v_file+'.png'),median_im)
+with open('points.csv','w') as csv_file:
+    csv_writer = csv.writer(csv_file, delimiter = ',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    csv_writer.writerows(target_points_all)
     
