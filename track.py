@@ -15,13 +15,30 @@ from skimage.morphology import closing, square, erosion
 from skimage.io import imsave
 import os
 import imageio
+import csv
 
-directory = r'C:\Users\coxbox\Documents\GitHub\Slice-and-dist-count\work_dir'
+directory = r'C:\Users\Conor\Documents\GitHub\Slice-and-dist-count\work_dir'
 file_list = os.listdir(directory)
-target_points_all = []
+temp_points_all = []
+
+with open(os.path.join(directory,'points.txt'),'r') as csv_file:
+    for line in csv_file:
+        temp_points_all.append(line[:-2])
+
+target_points_all =[]
+internal = []
+for temp_points in  temp_points_all:
+    temp_points=temp_points.split(',')
+    if '.wmv' in temp_points[0]:
+        target_points_all.append(internal)
+        internal = [temp_points[0]]
+    else:
+        internal.append([int(temp_points[0][1:]),int(temp_points[1])])
+    
 for v_file in file_list:
     if not('.wmv' in v_file[-5:]):
         continue
+    
     median_im = imageio.imread(os.path.join(directory,v_file+'.png'))
     cap = cv2.VideoCapture(os.path.join(directory,v_file))
     base_mask = np.zeros(np.shape(median_im))

@@ -18,7 +18,7 @@ from skimage.io import imsave
 import csv
 
 
-directory = r'C:\Users\coxbox\Documents\GitHub\Slice-and-dist-count\work_dir'
+directory = r'C:\Users\Conor\Documents\GitHub\Slice-and-dist-count\work_dir'
 file_list = os.listdir(directory)
 target_points_all = []
 for v_file in file_list:
@@ -35,7 +35,7 @@ for v_file in file_list:
             
             
     #loop to write some dots
-    target_points=[v_file]
+    target_points=[[v_file,v_file]]
     i=0
     median_im = []
     while(cap.isOpened()):
@@ -60,11 +60,12 @@ for v_file in file_list:
             break
     median_im = np.array(median_im)
     median_im = np.median(median_im,0)
-    median_im = median_im.astype(np.uint8)
-    target_points_all.append(target_points[0])
-    target_points_all.append(target_points[1])
+    median_im = median_im.astype(np.uint8) 
+    target_points_all.append(target_points)
     imsave(os.path.join(directory,v_file+'.png'),median_im)
-with open('points.csv','w') as csv_file:
-    csv_writer = csv.writer(csv_file, delimiter = ',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerows(target_points_all)
+
+with open(os.path.join(directory,'points.txt'),'w') as csv_file:
+    for s in target_points_all:
+        for ss in s:
+            csv_file.write(str(ss) +"\n")
     
