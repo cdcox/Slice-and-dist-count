@@ -16,8 +16,9 @@ from skimage.io import imsave
 import os
 import imageio
 import csv
+import xlwt 
 
-directory = r'C:\Users\Conor\Documents\GitHub\Slice-and-dist-count\work_dir'
+directory = r'C:\Users\coxbox\Documents\GitHub\Slice-and-dist-count\work_dir'
 file_list = os.listdir(directory)
 temp_points_all = []
 
@@ -34,11 +35,16 @@ for temp_points in  temp_points_all:
         internal = [temp_points[0]]
     else:
         internal.append([int(temp_points[0][1:]),int(temp_points[1])])
-    
+out_v=[]    
 for v_file in file_list:
     if not('.wmv' in v_file[-5:]):
         continue
-    
+    for knn,key_target in enumerate(internal):
+        if v_file in key_target:
+            break
+    target_points= internal[knn+1:knn+9]
+    out_v.append(v_file)
+        
     median_im = imageio.imread(os.path.join(directory,v_file+'.png'))
     cap = cv2.VideoCapture(os.path.join(directory,v_file))
     base_mask = np.zeros(np.shape(median_im))
@@ -77,5 +83,19 @@ for v_file in file_list:
             props = regionprops(label_image)
             areas = [x.area for x in props]
             big_obj = props[np.argmax(areas)]
-            inner_output= [big_obj.centroid[1],big_obj.centroid[0]]
+            inner_output.append([big_obj.centroid[1],big_obj.centroid[0]])
         output.append(inner_output)
+
+wb = xlwt.Workbook() 
+sheet1 = wb.add_sheet('Outputs')
+
+for vnn,v_file in enumerate(out_v):
+    for i in range(4):
+        sheet1.write(0,vnn*8+i*2,v_file+'x')
+        sheet1.write(0,vnn*8+i*2+1,v_file+'y')
+        for j in range(len(output)):
+            xy = output[j][vnn*4+i]
+            sheet1.write(j+1,vnn*8+i*2,xy[0])
+            sheet1.write(j+1,vnn*8+i*2+1,xy[1])
+wb.save(os.path.join(directory,'track_plot.xls'))
+            
