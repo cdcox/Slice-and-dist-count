@@ -89,14 +89,26 @@ for v_file in file_list:
 
 wb = xlwt.Workbook() 
 sheet1 = wb.add_sheet('Outputs')
+#Writing time thing
+sheet1.write(0,0,'time(s)')
+for jj in range(i):
+    sheet1.write(jj+1,0,jj/15)
 
 for vnn,v_file in enumerate(out_v):
     for i in range(4):
-        sheet1.write(0,vnn*8+i*2,v_file+'x')
-        sheet1.write(0,vnn*8+i*2+1,v_file+'y')
+        sheet1.write(0,1+vnn*9+i*3,v_file+str(i)+'x')
+        sheet1.write(0,1+vnn*9+i*3+1,v_file+str(i)+'y')
+        sheet1.write(0,1+vnn*9+i*3+2,v_file+str(i)+'dist(px)')
         for j in range(len(output)):
             xy = output[j][vnn*4+i]
-            sheet1.write(j+1,vnn*8+i*2,xy[0])
-            sheet1.write(j+1,vnn*8+i*2+1,xy[1])
+            if j!=0:
+                old_xy = output[j-1][vnn*4+i]
+                dist = np.sqrt((xy[0]-old_xy[0])**2 +(xy[1]-old_xy[1])**2)
+            else:
+                dist=0
+            
+            sheet1.write(j+1,1+vnn*9+i*3,xy[0])
+            sheet1.write(j+1,1+vnn*9+i*3+1,xy[1])
+            sheet1.write(j+1,1+vnn*9+i*3+2,dist)
 wb.save(os.path.join(directory,'track_plot.xls'))
             

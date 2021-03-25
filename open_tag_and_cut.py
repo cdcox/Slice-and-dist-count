@@ -24,6 +24,7 @@ target_points_all = []
 for v_file in file_list:
     if not('.wmv' in v_file[-5:]):
         continue
+    print(v_file)
     cap = cv2.VideoCapture(os.path.join(directory,v_file))
     #directory = r'C:\Users\Conor\Desktop\TRNDeepnetWorkingdir\AL_trn files'
     FPS =  cap.get(cv2.CAP_PROP_FPS)
