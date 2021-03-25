@@ -18,7 +18,7 @@ import imageio
 import csv
 import xlwt 
 
-directory = r'C:\Users\coxbox\Documents\GitHub\Slice-and-dist-count\work_dir'
+directory = r'C:\Users\Imaris\Desktop\OLM_locomotor_analyses'
 file_list = os.listdir(directory)
 temp_points_all = []
 
@@ -27,7 +27,7 @@ with open(os.path.join(directory,'points.txt'),'r') as csv_file:
         temp_points_all.append(line[:-2])
 
 target_points_all =[]
-internal = []
+internal = [[]]
 for temp_points in  temp_points_all:
     temp_points=temp_points.split(',')
     if '.wmv' in temp_points[0]:
@@ -39,11 +39,11 @@ out_v=[]
 for v_file in file_list:
     if not('.wmv' in v_file[-5:]):
         continue
-    for knn,key_target in enumerate(internal):
-        if v_file in key_target:
+    for knn,key_target in enumerate(target_points_all):
+        if v_file in key_target[0]:
             break
     print(v_file)
-    target_points= internal[knn+1:knn+9]
+    target_points= key_target[1:9]
     out_v.append(v_file)
         
     median_im = imageio.imread(os.path.join(directory,v_file+'.png'))
