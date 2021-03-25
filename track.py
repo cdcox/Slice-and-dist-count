@@ -42,6 +42,7 @@ for v_file in file_list:
     for knn,key_target in enumerate(internal):
         if v_file in key_target:
             break
+    print(v_file)
     target_points= internal[knn+1:knn+9]
     out_v.append(v_file)
         
