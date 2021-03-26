@@ -18,7 +18,7 @@ import imageio
 import csv
 import xlwt 
 
-directory = r'C:\Users\Imaris\Desktop\OLM_locomotor_analyses'
+directory = r'C:\Users\galll\Desktop\OLM_Loco_analyses'
 file_list = os.listdir(directory)
 temp_points_all = []
 
@@ -88,6 +88,8 @@ for v_file in file_list:
             inner_output.append([big_obj.centroid[1],big_obj.centroid[0]])
         output.append(inner_output)
     d_out.append(output)
+    
+i=5000
 
 wb = xlwt.Workbook() 
 sheet1 = wb.add_sheet('Outputs')
@@ -105,7 +107,7 @@ for vnn,v_file in enumerate(out_v):
         for j in range(len(output)):
             xy = inner_output[j][i]
             if j!=0:
-                old_xy = output[j-1][vnn*4+i]
+                old_xy = inner_output[j-1][i]
                 dist = np.sqrt((xy[0]-old_xy[0])**2 +(xy[1]-old_xy[1])**2)
             else:
                 dist=0
