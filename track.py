@@ -35,7 +35,8 @@ for temp_points in  temp_points_all:
         internal = [temp_points[0]]
     else:
         internal.append([int(temp_points[0][1:]),int(temp_points[1])])
-out_v=[]    
+out_v=[]
+d_out = []    
 for v_file in file_list:
     if not('.wmv' in v_file[-5:]):
         continue
@@ -86,6 +87,7 @@ for v_file in file_list:
             big_obj = props[np.argmax(areas)]
             inner_output.append([big_obj.centroid[1],big_obj.centroid[0]])
         output.append(inner_output)
+    d_out.append(output)
 
 wb = xlwt.Workbook() 
 sheet1 = wb.add_sheet('Outputs')
@@ -95,20 +97,21 @@ for jj in range(i):
     sheet1.write(jj+1,0,jj/15)
 
 for vnn,v_file in enumerate(out_v):
+    inner_output = d_out[vnn]
     for i in range(4):
-        sheet1.write(0,1+vnn*9+i*3,v_file+str(i)+'x')
-        sheet1.write(0,1+vnn*9+i*3+1,v_file+str(i)+'y')
-        sheet1.write(0,1+vnn*9+i*3+2,v_file+str(i)+'dist(px)')
+        sheet1.write(0,1+vnn*12+i*3,v_file+str(i)+'x')
+        sheet1.write(0,1+vnn*12+i*3+1,v_file+str(i)+'y')
+        sheet1.write(0,1+vnn*12+i*3+2,v_file+str(i)+'dist(px)')
         for j in range(len(output)):
-            xy = output[j][vnn*4+i]
+            xy = inner_output[j][i]
             if j!=0:
                 old_xy = output[j-1][vnn*4+i]
                 dist = np.sqrt((xy[0]-old_xy[0])**2 +(xy[1]-old_xy[1])**2)
             else:
                 dist=0
             
-            sheet1.write(j+1,1+vnn*9+i*3,xy[0])
-            sheet1.write(j+1,1+vnn*9+i*3+1,xy[1])
-            sheet1.write(j+1,1+vnn*9+i*3+2,dist)
+            sheet1.write(j+1,1+vnn*12+i*3,xy[0])
+            sheet1.write(j+1,1+vnn*12+i*3+1,xy[1])
+            sheet1.write(j+1,1+vnn*12+i*3+2,dist)
 wb.save(os.path.join(directory,'track_plot.xls'))
             
