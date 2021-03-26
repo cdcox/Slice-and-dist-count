@@ -104,7 +104,7 @@ for vnn,v_file in enumerate(out_v):
         sheet1.write(0,1+vnn*12+i*3,v_file+str(i)+'x')
         sheet1.write(0,1+vnn*12+i*3+1,v_file+str(i)+'y')
         sheet1.write(0,1+vnn*12+i*3+2,v_file+str(i)+'dist(px)')
-        for j in range(len(output)):
+        for j in range(len(inner_output)):
             xy = inner_output[j][i]
             if j!=0:
                 old_xy = inner_output[j-1][i]
